@@ -5,12 +5,14 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from typing import List, Optional, Dict
+import mlflow
 
 from arxiv_parser import ArxivParser
 from memory.raw import retrieve_context, save_interaction
 
 load_dotenv()
 
+mlflow.dspy.autolog()
 lm = dspy.LM(model="gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
 dspy.configure(lm=lm)
 
@@ -27,7 +29,14 @@ class PaperAnalyzerSignature(dspy.Signature):
 
 ag = dspy.ReAct(PaperAnalyzerSignature, tools=[get_paper_text])
 
+@mlflow.trace
 def chat_turn(user_input: str, user_id: str) -> str:
+    mlflow.update_current_trace(
+        metadata={
+            "mlflow.trace.user": user_id,  # Links trace to specific user
+            "mlflow.trace.session": user_id,  # Groups trace with conversation
+        }
+    )
     # Retrieve context
     context = retrieve_context(user_input, user_id)
     
