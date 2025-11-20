@@ -9,7 +9,7 @@ import mlflow
 
 from arxiv_parser import ArxivParser
 from memory.raw import RawMemory
-from database.main import insert_paper, get_paper
+from database.qdrant import insert_paper, get_paper
 
 load_dotenv()
 
@@ -18,11 +18,9 @@ lm = dspy.LM(model="gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
 dspy.configure(lm=lm)
 Memory = RawMemory()
 
-local_paper_cache: Dict[str, str] = {}
-
-def get_paper_text(url: str) -> str:
+def get_paper_text(url: str, query: Optional[str] = None) -> str:
     """Get the text of a paper from a url."""
-    paper = get_paper(url)
+    paper = get_paper(url, query)
     if paper is not None:
         return paper["markdown"]
     else:
@@ -32,7 +30,7 @@ def get_paper_text(url: str) -> str:
         return markdown
 
 class PaperAnalyzerSignature(dspy.Signature):
-    """Analyze a paper and return a summary of the paper."""
+    """Analyze a paper and return a summary of the paper. When there's a clear query use it in the get_paper_text tool."""
     user_input: str = dspy.InputField(description="The user query about the paper.")
     context: List[Dict] = dspy.InputField(description="The context of the conversation.")
     response: str = dspy.OutputField(description="The response to the user query.")
@@ -40,11 +38,11 @@ class PaperAnalyzerSignature(dspy.Signature):
 ag = dspy.ReAct(PaperAnalyzerSignature, tools=[get_paper_text])
 
 @mlflow.trace
-def chat_turn(user_input: str, user_id: str) -> str:
+def chat_turn(user_input: str, user_id: str, session_id: str) -> str:
     mlflow.update_current_trace(
         metadata={
-            "mlflow.trace.user": user_id,  # Links trace to specific user
-            "mlflow.trace.session": user_id,  # Groups trace with conversation
+            "mlflow.trace.user": user_id,  
+            "mlflow.trace.session": session_id,
         }
     )
     # Retrieve context
@@ -61,12 +59,13 @@ def chat_turn(user_input: str, user_id: str) -> str:
 if __name__ == "__main__":
     print("Welcome to your personal Research Agent! How can I assist you with your research today?")
     user_id = "alice"
-    
+    session_id = "123"
+
     while True:
         user_input = input("You: ")
         if user_input.lower() in ['quit', 'exit', 'bye']:
             print("Research Agent: Thank you for using our research service. Have a great research!")
             break
         
-        response = chat_turn(user_input, user_id)
+        response = chat_turn(user_input, user_id, session_id)
         print(f"Research Agent: {response}")
