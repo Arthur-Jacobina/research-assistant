@@ -53,7 +53,7 @@ class ArxivRAG:
             collection_name=collection_name,
             chunks=chunks,
             source_identifier=paper_url,
-            recreate_if_exists=True
+            recreate_if_exists=False
         )
         
         result["paper_url"] = paper_url
