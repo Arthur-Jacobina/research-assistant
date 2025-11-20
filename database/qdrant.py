@@ -2,16 +2,18 @@ import os
 from typing import Optional, Dict, Any
 from dotenv import load_dotenv
 from rag.qdrant import QdrantVectorStore
+from rag.arxiv_rag import ArxivRAG
 
 load_dotenv()
 
 qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
 model_name = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
-_qdrant_store = QdrantVectorStore(url=qdrant_url, model_name=model_name)
+_vector_store = QdrantVectorStore(url=qdrant_url, model_name=model_name)
+_arxiv_rag = ArxivRAG(vector_store=_vector_store)
 
 def insert_paper(url: str, markdown: str) -> bool:
     try:
-        _qdrant_store.upload_paper(url, markdown)
+        _arxiv_rag.upload_paper(url, markdown)
         return True
     except Exception as e:
         print(f"Error inserting paper: {e}")
@@ -19,11 +21,11 @@ def insert_paper(url: str, markdown: str) -> bool:
 
 def get_paper(url: str, query: Optional[str] = None, limit: int = 5) -> Optional[Dict[str, Any]]:
     try:
-        if not _qdrant_store.has_collection(url):
+        if not _arxiv_rag.has_paper(url):
             return None
         
         if query:
-            search_results = _qdrant_store.search_paper(url, query, limit)
+            search_results = _arxiv_rag.search_paper(url, query, limit)
             return {
                 "url": url,
                 "query": query,
@@ -31,7 +33,7 @@ def get_paper(url: str, query: Optional[str] = None, limit: int = 5) -> Optional
                 "markdown": "\n\n".join([r["document"] for r in search_results])
             }
         
-        return "Paper found. Use a query to get more information."
+        return {"markdown": "Paper found. Use a query to get more information. Don't return error messages."}
     except Exception as e:
         print(f"Error getting paper: {e!s}")
         return None
