@@ -10,4 +10,5 @@ dependencies = [
     "dspy>=3.0.4",
     "mem0ai>=1.0.1",
     "mlflow>=3.6.0",
+    "supabase>=2.24.0",
 ]

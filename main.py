@@ -8,18 +8,28 @@ from typing import List, Optional, Dict
 import mlflow
 
 from arxiv_parser import ArxivParser
-from memory.raw import retrieve_context, save_interaction
+from memory.raw import RawMemory
+from database.main import insert_paper, get_paper
 
 load_dotenv()
 
 mlflow.dspy.autolog()
 lm = dspy.LM(model="gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
 dspy.configure(lm=lm)
+Memory = RawMemory()
+
+local_paper_cache: Dict[str, str] = {}
 
 def get_paper_text(url: str) -> str:
     """Get the text of a paper from a url."""
-    parser = ArxivParser(url)
-    return parser.parse_url_to_markdown(url)
+    paper = get_paper(url)
+    if paper is not None:
+        return paper["markdown"]
+    else:
+        parser = ArxivParser(url)
+        markdown = parser.parse_url_to_markdown(url)
+        insert_paper(url, markdown)
+        return markdown
 
 class PaperAnalyzerSignature(dspy.Signature):
     """Analyze a paper and return a summary of the paper."""
@@ -38,13 +48,13 @@ def chat_turn(user_input: str, user_id: str) -> str:
         }
     )
     # Retrieve context
-    context = retrieve_context(user_input, user_id)
+    context = Memory.retrieve(user_input, user_id)
     
     # Generate response
     response = ag(user_input=user_input, context=context)
     
     # Save interaction
-    save_interaction(user_id, user_input, response.response)
+    Memory.save(user_id, user_input, response.response)
     
     return response.response
 
