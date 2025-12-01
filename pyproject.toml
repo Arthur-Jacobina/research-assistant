@@ -10,13 +10,18 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "arxiv>=2.3.1",
+    "braintrust>=0.3.9",
     "bs4>=0.0.2",
     "dspy>=3.0.4",
+    "fastapi>=0.115.0",
     "fastembed>=0.7.3",
     "mem0ai>=1.0.1",
     "mlflow>=3.6.0",
+    "python-dotenv>=1.0.0",
     "qdrant-client>=1.16.0",
+    "requests>=2.32.0",
     "supabase>=2.24.0",
+    "uvicorn>=0.32.0",
 ]
 
 [tool.hatch.build.targets.wheel]
