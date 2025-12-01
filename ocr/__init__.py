@@ -1,27 +1,28 @@
 """OCR integration module for GraphorLM API."""
 
 from ocr.graphor import (
-    upload_document,
-    process_document,
-    list_elements,
-    get_all_elements,
-    extract_tables,
     extract_by_type,
-    get_document_structure,
     extract_sections,
+    extract_tables,
+    get_all_elements,
+    get_document_structure,
+    list_elements,
+    process_document,
+    upload_document,
 )
 from ocr.utils import graphor_fetch
 
+
 __all__ = [
-    "upload_document",
-    "process_document",
-    "list_elements",
-    "get_all_elements",
-    "extract_tables",
-    "extract_by_type",
-    "get_document_structure",
-    "extract_sections",
-    "DocumentAnalyzer",
-    "graphor_fetch"
+    'DocumentAnalyzer',
+    'extract_by_type',
+    'extract_sections',
+    'extract_tables',
+    'get_all_elements',
+    'get_document_structure',
+    'graphor_fetch',
+    'list_elements',
+    'process_document',
+    'upload_document'
 ]
 

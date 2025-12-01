@@ -1,1 +1,1 @@
-GRAPHOR_BASE_URL = "https://sources.graphorlm.com"
+GRAPHOR_BASE_URL = 'https://sources.graphorlm.com'

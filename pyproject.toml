@@ -16,7 +16,6 @@ dependencies = [
     "fastapi>=0.115.0",
     "fastembed>=0.7.3",
     "mem0ai>=1.0.1",
-    "mlflow>=3.6.0",
     "python-dotenv>=1.0.0",
     "qdrant-client>=1.16.0",
     "requests>=2.32.0",
@@ -26,3 +25,8 @@ dependencies = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["arxiv_parser", "database", "memory", "rag"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.7",
+]

@@ -1,6 +1,7 @@
-from pydantic import BaseModel
 from abc import abstractmethod
-from typing import List, Dict
+
+from pydantic import BaseModel
+
 
 class Memory(BaseModel):
     @abstractmethod
@@ -8,5 +9,5 @@ class Memory(BaseModel):
         pass
 
     @abstractmethod
-    def retrieve(self, query: str, user_id: str) -> List[Dict]:
+    def retrieve(self, query: str, user_id: str) -> list[dict]:
         pass
