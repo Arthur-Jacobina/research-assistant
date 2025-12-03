@@ -1,13 +1,10 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 
-from pydantic import BaseModel
-
-
-class Memory(BaseModel):
+class Memory(ABC):
     @abstractmethod
-    def save(self, user_id: str, user_input: str, assistant_response: str):
+    async def save(self, user_id: str, user_input: str, assistant_response: str):
         pass
 
     @abstractmethod
-    def retrieve(self, query: str, user_id: str) -> list[dict]:
+    async def retrieve(self, query: str, user_id: str) -> list[dict]:
         pass

@@ -1355,6 +1355,18 @@ wheels = [
 ]
 
 [[package]]
+name = "neo4j"
+version = "6.0.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytz" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/60/b2/87534fc0520e5f9db1432bacc3f8d0ce024608010babc4f65b96e0c34906/neo4j-6.0.3.tar.gz", hash = "sha256:7fb79e166e281aafd67d521f6611763ebcdc529f26db506c5605f91ddcd825ea", size = 239653, upload-time = "2025-11-06T16:57:57.012Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ba/fe/55ed1d4636defb57fae1f7be7818820aa8071d45949c91ef8649930e70c5/neo4j-6.0.3-py3-none-any.whl", hash = "sha256:a92023854da96aed4270e0d03d6429cdd7f0d3335eae977370934f4732de5678", size = 325433, upload-time = "2025-11-06T16:57:55.03Z" },
+]
+
+[[package]]
 name = "numpy"
 version = "2.3.5"
 source = { registry = "https://pypi.org/simple" }
@@ -2047,11 +2059,14 @@ dependencies = [
     { name = "dspy" },
     { name = "fastapi" },
     { name = "fastembed" },
+    { name = "loguru" },
     { name = "mem0ai" },
+    { name = "neo4j" },
     { name = "python-dotenv" },
     { name = "qdrant-client" },
     { name = "requests" },
     { name = "supabase" },
+    { name = "texsoup" },
     { name = "uvicorn" },
 ]
 
@@ -2068,11 +2083,14 @@ requires-dist = [
     { name = "dspy", specifier = ">=3.0.4" },
     { name = "fastapi", specifier = ">=0.115.0" },
     { name = "fastembed", specifier = ">=0.7.3" },
+    { name = "loguru", specifier = ">=0.7.3" },
     { name = "mem0ai", specifier = ">=1.0.1" },
+    { name = "neo4j", specifier = ">=6.0.3" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
     { name = "qdrant-client", specifier = ">=1.16.0" },
     { name = "requests", specifier = ">=2.32.0" },
     { name = "supabase", specifier = ">=2.24.0" },
+    { name = "texsoup", specifier = ">=0.3.1" },
     { name = "uvicorn", specifier = ">=0.32.0" },
 ]
 
@@ -2356,6 +2374,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/0a/d4/2b0cd0fe285e14b36db076e78c93766ff1d529d70408bd1d2a5a84f1d929/tenacity-9.1.2.tar.gz", hash = "sha256:1169d376c297e7de388d18b4481760d478b0e99a777cad3a9c86e556f4b697cb", size = 48036, upload-time = "2025-04-02T08:25:09.966Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e5/30/643397144bfbfec6f6ef821f36f33e57d35946c44a2352d3c9f0ae847619/tenacity-9.1.2-py3-none-any.whl", hash = "sha256:f77bf36710d8b73a50b2dd155c97b870017ad21afe6ab300326b0371b3b05138", size = 28248, upload-time = "2025-04-02T08:25:07.678Z" },
+]
+
+[[package]]
+name = "texsoup"
+version = "0.3.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/84/58/1c503390ed1a81cdcbff811dbf7a54132994acef8dd2194d55cf657a9e97/TexSoup-0.3.1.tar.gz", hash = "sha256:3f6b2ad0abe3688a6656f544c1ba04d0eb25f423f8c377b7369f9ce061ddb70b", size = 26174, upload-time = "2020-08-03T10:14:56.027Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5c/a7/e9eb0e14633710b51b8472a3beccc7d6a44d55a0a3ef4493ebb4b7977253/TexSoup-0.3.1-py3-none-any.whl", hash = "sha256:ae8f08d17f86a905b7c2ce01c9f2da613fbca0bcea78c71d727719e896045bed", size = 27809, upload-time = "2024-02-28T09:15:28.697Z" },
 ]
 
 [[package]]
