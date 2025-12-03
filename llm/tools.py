@@ -1,8 +1,12 @@
 from graph.traverse.operations import *
+from ingestion.arxiv.pipeline import *
 
 def get_paper(paper_id: str) -> str:
-    """Get the text of a paper from a paper id."""
+    """Get the text of a paper from a paper id. If not found, insert it."""
     paper = search_paper(paper_id)
+    if not paper:
+        ingest_paper(paper_id)
+        paper = search_paper(paper_id)
     return paper['p']['title'], paper['p']['abstract'], paper['p']['authors']
 
 def get_sections(paper_id: str) -> list[str]:
