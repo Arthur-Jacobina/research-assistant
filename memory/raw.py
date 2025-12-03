@@ -1,31 +1,23 @@
-from typing import List, Dict
+from braintrust import current_span, traced
+import asyncio
 
-from memory.base import Memory
+# This mechanism is not so reliable. Autoscaling would kill it
+# And its not context efficient but for small stuff it's fine
+local_memory = {}
 
-class RawMemory(Memory):
-    context: List[List[Dict]] = []
-    
-    def __init__(self):
-        super().__init__(context=[])
+class RawMemory():
 
-    def save(self, user_id: str, user_input: str, assistant_response: str):
-        """Save the interaction to Mem0"""
-        try:
-            interaction = [
-                {
-                "role": "user",
-                "content": user_input
-                },
-                {
-                    "role": "assistant",
-                    "content": assistant_response
-                }
-            ]
-            result = self.context.append(interaction)
-            print(f"Memory saved successfully: {len(interaction)} memories added")
-        except Exception as e:
-            print(f"Error saving interaction: {e}")
-
-    def retrieve(self, query: str, user_id: str) -> List[Dict]:
+    @traced(name="Memory Retrieval")
+    async def retrieve(self, query: str, user_id: str) -> list[dict]:
         """Retrieve relevant context from Mem0"""
-        return self.context
+        return local_memory.get(user_id, [])[:10]
+
+    @traced(name="Memory Saving")
+    async def save(self, user_id: str, user_input: str, assistant_response: str):
+        """Save the interaction to Mem0"""
+        if user_id not in local_memory:
+            local_memory[user_id] = []
+        local_memory[user_id].append({
+            "user_input": user_input,
+            "assistant_response": assistant_response[:800]
+        })
